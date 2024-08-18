@@ -1,7 +1,9 @@
 from abc import ABC
-from typing import Generic, TypeVar, Type, Optional
+from typing import Generic, TypeVar, Type
 
 from sqlalchemy.orm import Session
+
+from exceptions.object_not_found_error import ObjectNotFoundError
 
 T = TypeVar('T')
 
@@ -42,17 +44,23 @@ class BaseRepository(ABC, Generic[T]):
 
         self._session.add(instance)
 
-    def get_by_primary_key(self, primary_key) -> Optional[T]:
+    def get_by_primary_key(self, primary_key: str | int) -> T:
         """
         Retrieves an instance of the model by its primary key.
 
-        :param primary_key: The primary key of the model instance to retrieve.
-        :type primary_key: Any
-        :returns: The instance of the model, or None if not found.
-        :rtype: Optional[T]
+        :param primary_key: The primary key of the model instance to retrieve. Must be a string or an integer.
+        :type primary_key: str | int
+        :raises ObjectNotFoundError: If the model instance with the given primary key is not found.
+        :returns: The instance of the model.
+        :rtype: T
         """
 
-        return self._session.query(self._model_class).get(primary_key)
+        instance = self._session.query(self._model_class).get(primary_key)
+
+        if not instance:
+            raise ObjectNotFoundError(f"The {self._model_class.__name__} with primary key {primary_key} not found.")
+
+        return instance
 
     def list(self) -> list[T]:
         """
@@ -71,14 +79,14 @@ class BaseRepository(ABC, Generic[T]):
         :param primary_key: The primary key of the model instance to update.
         :type primary_key: Any
         :param kwargs: Key-value pairs of attributes to update on the model instance.
-        :raises ValueError: If the model instance with the given primary key is not found.
+        :raises ObjectNotFoundError: If the model instance with the given primary key is not found.
         :raises AttributeError: If an invalid attribute is provided for the model.
         """
 
         instance = self._session.query(self._model_class).get(primary_key)
 
         if not instance:
-            raise ValueError(f'Object "{self._model_class.__name__}" with primary key "{primary_key}" not found.')
+            raise ObjectNotFoundError(f"The {self._model_class.__name__} with primary key {primary_key} not found.")
 
         for key, value in kwargs.items():
             if not hasattr(instance, key):
@@ -93,12 +101,12 @@ class BaseRepository(ABC, Generic[T]):
 
         :param primary_key: The primary key of the model instance to delete.
         :type primary_key: Any
-        :raises ValueError: If the model instance with the given primary key is not found.
+        :raises ObjectNotFoundError: If the model instance with the given primary key is not found.
         """
 
         instance = self._session.query(self._model_class).get(primary_key)
 
         if not instance:
-            raise ValueError(f'Object "{self._model_class}" with primary key "{primary_key}" not found.')
+            raise ObjectNotFoundError(f"The {self._model_class.__name__} with primary key {primary_key} not found.")
 
         self._session.delete(instance)
