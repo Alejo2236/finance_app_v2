@@ -36,7 +36,7 @@ class BaseRepository(ABC, Generic[T]):
 
     def add(self, instance: T) -> None:
         """
-        Adds an instance of the model to the session.
+        Adds an instance of the database model to the session.
 
         :param instance: The model instance to add to the session.
         :type instance: T
@@ -46,7 +46,7 @@ class BaseRepository(ABC, Generic[T]):
 
     def get_by_primary_key(self, primary_key: str | int) -> T:
         """
-        Retrieves an instance of the model by its primary key.
+        Retrieves an instance of the database model by its primary key.
 
         :param primary_key: The primary key of the model instance to retrieve. Must be a string or an integer.
         :type primary_key: str | int
@@ -64,7 +64,7 @@ class BaseRepository(ABC, Generic[T]):
 
     def list(self) -> list[T]:
         """
-        Retrieves all instances of the model from the database.
+        Retrieves all instances of the database model from the database.
 
         :returns: A list of all model instances.
         :rtype: list[T]
@@ -74,7 +74,7 @@ class BaseRepository(ABC, Generic[T]):
 
     def update_by_primary_key(self, primary_key, **kwargs) -> None:
         """
-        Updates an instance of the model by its primary key with provided attributes.
+        Updates an instance of the database model by its primary key with provided attributes.
 
         :param primary_key: The primary key of the model instance to update.
         :type primary_key: Any
@@ -97,7 +97,7 @@ class BaseRepository(ABC, Generic[T]):
 
     def delete_by_primary_key(self, primary_key) -> None:
         """
-        Deletes an instance of the model by its primary key.
+        Deletes an instance of the database model by its primary key.
 
         :param primary_key: The primary key of the model instance to delete.
         :type primary_key: Any
