@@ -52,3 +52,14 @@ class TestCategoryRepository(unittest.TestCase):
 
         updated_category = self.repository.get_by_primary_key(category.name)
         self.assertEqual(updated_category.name, "Updated Name")
+
+    def test_delete_category(self):
+        """Test deleting an existing category."""
+        category = CategoryDb(name="To Be Deleted")
+        self.repository.add(category)
+        self.session.flush()
+
+        self.repository.delete_by_primary_key(category.name)
+        self.session.flush()
+        with self.assertRaises(ObjectNotFoundError):
+            self.repository.get_by_primary_key(category.name)
