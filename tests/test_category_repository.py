@@ -10,6 +10,8 @@ from repositories.category_repository import CategoryRepository
 
 
 class TestCategoryRepository(unittest.TestCase):
+    engine = None
+
     @classmethod
     def setUpClass(cls) -> None:
         """Set up the test database and create the schema."""

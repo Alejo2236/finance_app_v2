@@ -41,10 +41,10 @@ class BaseRepository(ABC, Generic[T]):
         :param instance: The model instance to add to the session.
         :type instance: T
         """
-
         self._session.add(instance)
 
     def get_by_primary_key(self, primary_key: str | int) -> T:
+
         """
         Retrieves an instance of the database model by its primary key.
 
