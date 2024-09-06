@@ -55,7 +55,7 @@ class BaseRepository(ABC, Generic[T]):
         :rtype: T
         """
 
-        instance = self._session.query(self._model_class).get(primary_key)
+        instance = self._session.get(self._model_class, primary_key)
 
         if not instance:
             raise ObjectNotFoundError(f"The {self._model_class.__name__} with primary key {primary_key} not found.")
@@ -83,7 +83,7 @@ class BaseRepository(ABC, Generic[T]):
         :raises AttributeError: If an invalid attribute is provided for the model.
         """
 
-        instance = self._session.query(self._model_class).get(primary_key)
+        instance = self._session.get(self._model_class, primary_key)
 
         if not instance:
             raise ObjectNotFoundError(f"The {self._model_class.__name__} with primary key {primary_key} not found.")
@@ -104,7 +104,7 @@ class BaseRepository(ABC, Generic[T]):
         :raises ObjectNotFoundError: If the model instance with the given primary key is not found.
         """
 
-        instance = self._session.query(self._model_class).get(primary_key)
+        instance = self._session.get(self._model_class, primary_key)
 
         if not instance:
             raise ObjectNotFoundError(f"The {self._model_class.__name__} with primary key {primary_key} not found.")

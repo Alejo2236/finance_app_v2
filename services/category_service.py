@@ -1,4 +1,5 @@
 from models.category import Category
+from repositories.category_repository import CategoryRepository
 from unitofwork.unit_of_work import UnitOfWork
 
 
@@ -41,6 +42,6 @@ class CategoryService:
         """
 
         with self.__unit_of_work as uow:
-            category_repository = uow.categories
+            category_repository: CategoryRepository = uow.categories
             category_database_model = category_repository.get_by_primary_key(name)
             return Category(category_database_model.name)
